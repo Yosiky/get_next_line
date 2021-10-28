@@ -10,72 +10,6 @@ char	*ft_memcpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-/*
-static	char    *ft_fast_completion(char *bdest, char *bsrc, size_t n)
-{
-	t_ull	*ptr_dest;
-	t_ull	*ptr_src;
-	size_t	len;
-
-	ptr_dest = (t_ull *)bdest;
-	ptr_src = (t_ull *)bsrc;
-	len = n / 8;
-	while (len--)
-		*(ptr_dest++) = *(ptr_src++);
-	bdest = (char *)ptr_dest;
-	bsrc = (char *)ptr_src;
-	len = n % 8;
-	while (len--)
-		*(bdest++) = *(bsrc++);
-	return (bdest);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	char	*bptr_dest;
-	char	*bptr_src;
-
-	if (dest == src || n == 0)
-		return (dest);
-	bptr_dest = (char *)dest;
-	bptr_src = (char *)src;
-	while ((size_t)bptr_dest % 8 && n)
-	{
-		*(bptr_dest++) = *(bptr_src++);
-		n--;
-	}
-	if (n == 0)
-		return (bptr_dest);
-	return (ft_fast_completion(bptr_dest, bptr_src, n));
-}
-*/
-/*
-char	*ft_arrnew(char *src, size_t len)
-{
-	char	*dst;
-
-	dst = (char *)malloc(sizeof(char) * (len + 1));
-	if (dst == NULL)
-		return (NULL);
-	ft_memcpy(dst, src, len);
-	dst[len] = '\0';
-	return (dst);
-}
-*/
-/*
-size_t	ft_check(char *arr, size_t start, size_t end)
-{
-	size_t	i;
-
-	i = 0;
-	while (i + start < end && arr[start + i] != '\n')
-		i++;
-	if (arr[start + i] == '\n')
-		return (i + 1);
-	else
-		return (-1);
-}
-*/
 t_lst	*ft_lstnew(char *src, size_t len)
 {
 	t_lst	*res;
@@ -142,96 +76,6 @@ char	*ft_lsttoarr(t_lst *lst)
 	return (result);
 }
 
-/*
-char	*get_next_line(int fd)
-{
-	static t_buff   st_buff;
-	t_lst			*lst_begin;
-	t_lst			**lst_end;
-	char			buff[BUFFER_SIZE];
-	size_t			len;
-	int			buff_len;
-
-	len = 0;
-	lst_begin = NULL;
-	lst_end = &lst_begin;
-	if (st_buff.end != st_buff.begin && st_buff.end)
-	{
-		len = ft_check(st_buff.buff, st_buff.begin, st_buff.end);
-		if (len != (size_t)-1)
-		{
-			lst_begin = ft_lstnew(st_buff.buff + st_buff.begin, len);
-			st_buff.begin += len;
-			if (st_buff.begin == st_buff.end)
-				st_buff.end = 0;
-			return (ft_lsttoarr(lst_begin));
-		}
-		len = st_buff.end - st_buff.begin;
-		lst_begin = ft_lstnew(st_buff.buff + st_buff.begin, len);
-		st_buff.end = 0;
-		if (lst_begin != NULL)
-			lst_end = &lst_begin->next;
-		else
-			return (NULL);
-	}
-	while (1)
-	{
-		buff_len = read(fd, buff, BUFFER_SIZE);
-		if (buff_len <= 0)
-			break;
-		len = ft_check(buff, 0, buff_len);
-		if (len == (size_t)-1)
-		{
-			*lst_end = ft_lstnew(buff, buff_len);
-			if (*lst_end == NULL)
-				return (ft_lstclear(lst_begin));
-			else
-				lst_end = &((*lst_end)->next);
-		}
-		else
-		{
-			*lst_end = ft_lstnew(buff, len);
-			st_buff.begin = 0;
-			st_buff.end = buff_len - len;
-			ft_memcpy(st_buff.buff, buff + len, st_buff.end);
-			break;
-		}
-	}
-	return (ft_lsttoarr(lst_begin));
-}
-*/
-
-
-
-/*
-size_t	ft_check_buff(t_lst **lend, char *buff, size_t *len, size_t *ret)
-{
-	size_t	i;
-	char	flag;
-
-	flag = 0;
-	i = 0;
-	while (i < *len && buff[i] != '\n')
-		i++;
-	if (buff[i] == '\n')
-	{
-		i++;
-		flag = 1;
-	}
-	if (i > 0)
-	{
-		*lend = ft_lstnew(buff, i);
-		if (*lend == NULL)
-			return (-1);
-		lend = &(*lend)->next;
-		ft_memcpy(buff, buff + i, *len - i);
-		*len -= i;
-		*ret = i;
-	}
-	return (0);
-}
-*/
-
 int ft_check(char *buff, size_t len, size_t *out) {
 	size_t  i;
 	char    flag;
@@ -250,76 +94,6 @@ int ft_check(char *buff, size_t len, size_t *out) {
 	return (flag);
 }
 
-size_t  ft_read(int fd, t_lst **lend, char *buff, size_t *end)
-{
-	size_t  len;
-
-	while (1)
-	{
-		*end = read(fd, buff, BUFFER_SIZE);
-		if (*end == 0)
-			return (0);
-		else if (*end == (size_t)-1)
-			return (1);
-		ft_check(buff, *end, &len);
-		*lend = ft_lstnew(buff, len);
-		if (*lend == NULL)
-			return (1);
-		if (len != *end)
-		{
-			*end -= len;
-			ft_memcpy(buff, buff + len, *end);
-			break;
-		}
-	}
-	return (0);
-}
-/*
-char	*get_next_line(int fd) {
-	static char buff[BUFFER_SIZE + 1] = {};
-	static size_t end = 0;
-	t_lst *lst_begin;
-	t_lst **lst_end;
-	size_t len;
-
-	lst_begin = NULL;
-	lst_end = &lst_begin;
-	ft_check(buff, end, &len);
-	if (len)
-	{
-		lst_begin = ft_lstnew(buff, len);
-		if (lst_begin == NULL)
-			return (NULL);
-		lst_end = &lst_begin->next;
-	}
-	end -= len;
-	ft_memcpy(buff, buff + len, end);
-	if (lst_begin == NULL || lst_begin->data[lst_begin->len] != '\n')
-		if (ft_read(fd, lst_end, buff, &end))
-			ft_lstclear(lst_begin);
-	return (ft_lsttoarr(lst_begin));
-
-//
-	if (ft_check_buff(lst_end, buff, &end, &len) == (size_t)-1) {
-		return (NULL);
-	} else if (!len)
-	{
-		while (1)
-		{
-			end = read(fd, buff, BUFFER_SIZE);
-			if (ft_check_buff(lst_end, buff, &end, &len) == (size_t)-1)
-			{
-				ft_lstclear(lst_begin);
-				return (NULL);
-			}
-			else if (!len)
-				break;
-		}
-	}
-	return (ft_lsttoarr(lst_begin));
- //
-}
-*/
 int		ft_todo(t_lst ***iter, char *src, size_t *len, t_lst *begin)
 {
 	size_t	l;
@@ -361,8 +135,11 @@ char    *get_next_line(int fd)
 	{
 		end = read(fd, buff, BUFFER_SIZE);
 		if (end == (size_t)-1)
+		{
+			end = 0;
 			ft_lstclear(lst_begin);
-		if (end <= 0)
+		}
+		if (end == 0 || end == (size_t)-1)
 			break;
 		if (ft_todo(&lst_end, buff, &end, lst_begin))
 			break;

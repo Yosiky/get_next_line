@@ -60,7 +60,6 @@ size_t	ft_check(char *arr, size_t start, size_t end)
 	i = 0;
 	while (i + start < end && arr[start + i] != '\n')
 		i++;
-	printf("i = %ld\n", i);
 	if (arr[start + i] == '\n')
 		return (i + 1);
 	else
@@ -133,7 +132,7 @@ char	*ft_lsttoarr(t_lst *lst)
 
 char	*get_next_line(int fd)
 {
-	static	t_buff	st_buff = {};
+	static t_buff   st_buff;
 	t_lst			*lst_begin;
 	t_lst			**lst_end;
 	char			buff[BUFFER_SIZE];
@@ -156,6 +155,7 @@ char	*get_next_line(int fd)
 		}
 		len = st_buff.end - st_buff.begin;
 		lst_begin = ft_lstnew(st_buff.buff + st_buff.begin, len);
+		st_buff.end = 0;
 		if (lst_begin != NULL)
 			lst_end = &lst_begin->next;
 		else

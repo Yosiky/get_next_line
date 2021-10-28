@@ -1,96 +1,159 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/23 15:58:01 by eestelle          #+#    #+#             */
-/*   Updated: 2021/10/23 17:28:24 by eestelle         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-int	ft_check(char *buff, size_t start, size_t finish)
+typedef unsigned long long	t_ull;
+
+
+char	*ft_memcpy(char *dest, const char *src, size_t n)
+{
+	while (n--)
+		*(dest++) = *(src++);
+	return (dest);
+}
+
+t_lst	*ft_lstnew(char *src, size_t len)
+{
+	t_lst	*res;
+
+	res = (t_lst *)malloc(sizeof(t_lst) * 1);
+	if (res == NULL)
+		return (NULL);
+	ft_memcpy(res->data, src, len);
+	res->len = len;
+	res->next = NULL;
+	return (res);
+}
+
+void	*ft_lstclear(t_lst *lst)
+{
+	t_lst *iter;
+
+	while (lst != NULL)
+	{
+		iter = lst;
+		lst = lst->next;
+		free(iter);
+	}
+	return (NULL);
+}
+
+size_t	ft_strlen(t_lst *lst)
 {
 	size_t	len;
 
 	len = 0;
-	while (start + len < finish && buff[start + len] != '\n')
+	while (lst != NULL)
+	{
 		len++;
-	if (buff[start + len] == '\n')
-		return (len + 1);
-	else
-		return (-1);
+		lst = lst->next;
+	}
+	return (len);
 }
 
-void	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+char	*ft_lsttoarr(t_lst *lst)
 {
-	size_t	i;
+	size_t	count;
+	char	*result;
+	char	*iter;
+	t_lst   *start;
+
+	if (lst == NULL)
+		return (NULL);
+	start = lst;
+	count = ft_strlen(lst);
+	if (count == 0)
+		return (NULL);
+	result = (char *)malloc(sizeof(char) * (count * BUFFER_SIZE + 1));
+	if (result == NULL)
+		return (NULL);
+	iter = result;
+	while (lst != NULL)
+	{
+		iter = ft_memcpy(iter, lst->data, lst->len);
+		lst = lst->next;
+	}
+	*iter = '\0';
+	ft_lstclear(start);
+	return (result);
+}
+
+int ft_check(char *buff, size_t len, size_t *out) {
+	size_t  i;
+	char    flag;
 
 	i = 0;
-	while (i < dstsize - 1 && dstsize > 0)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (dstsize > 0)
-		dst[i] = '\0';
-}
-
-char	*ft_arrnew(char **arr, size_t size)
-{
-	*arr = (char *)malloc(sizeof(char) * (size + 1));
-	return (*arr);
-}
-
-char	*get_next_line(int fd)
-{
-	static	t_buff	abuff[1024] = {};
-	char			*result;
-	int				len;
-	size_t			alen;
-	size_t          count;
-
-	if (fd < 0 || fd > 1024)
-		return (NULL);
-	alen = BUFFER_SIZE;
-	count = 0;
-	if (ft_arrnew(&result, alen) == NULL)
-		return (NULL);
-	if (abuff[fd].buff == NULL)
-	{
-		if (ft_arrnew(&abuff[fd].buff, BUFFER_SIZE - 1) == NULL)
-		{
-			free(result);
-			return (NULL);
+	flag = 0;
+	if (len > 0) {
+		while (i < len && buff[i] != '\n')
+			i++;
+		if (buff[i] == '\n') {
+			i++;
+			flag = 1;
 		}
 	}
+	*out = i;
+	return (flag);
+}
+
+int		ft_todo(t_lst ***iter, char *src, size_t *len, t_lst *begin)
+{
+	size_t	l;
+	char	flag;
+
+	flag = ft_check(src, *len, &l);
+	if (flag)
+		**iter = ft_lstnew(src, l);
 	else
+		**iter = ft_lstnew(src, *len);
+	if (**iter == NULL)
 	{
-		len = ft_check(abuff[fd].buff, abuff[fd].begin, abuff[fd].end);
-		if (len >= 0)
-		{
-			ft_strlcpy(result, abuff[fd].buff + abuff[fd].begin, len + 1);
-			if (abuff[fd].begin + len == abuff[fd].end)
-			{
-				abuff[fd].begin = 0;
-				abuff[fd].end = 0;
-				free(abuff[fd].buff);
-				abuff[fd].buff = NULL;
-			}
-			else
-				abuff[fd].begin += len;
-			return (result);
-		}
-		else
-		{
-			ft_strlcpy(result, abuff[fd].buff + abuff[fd].begin, abuff[fd].end + 1);
-			count = abuff[fd].end - abuff[fd].begin;
-			abuff[fd].begin = 0;
-			abuff[fd].end = 0;
-		}
+		ft_lstclear(begin);
+		return (-1);
 	}
-	return (ft_read(fd, result, alen, count, &abuff[fd]));
+	if (flag)
+	{
+		*len -= l;
+		ft_memcpy(src, src + l, *len);
+		return (1);
+	}
+	*iter = &(**iter)->next;
+	return (0);
+}
+
+void	*ft_initial(char **buff, t_lst **begin, t_lst ***end)
+{
+	if (*buff == NULL)
+		*buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 2));
+	if (*buff == NULL)
+		return (NULL);
+	*begin = NULL;
+	*end = begin;
+	return (*buff);
+}
+
+char    *get_next_line(int fd)
+{
+	static char     *buff[1024] = {};
+	static size_t   end[1024] = {};
+	t_lst           *lst_begin;
+	t_lst			**lst_end;
+
+	if (fd < 0 || fd > 1024 || ft_initial(&buff[fd], &lst_begin, &lst_end) == NULL)
+		return (NULL);
+	if (end[fd] != 0)
+		if (ft_todo(&lst_end, buff[fd], &end[fd], NULL))
+			return (ft_lsttoarr(lst_begin));
+	while (1)
+	{
+		end[fd] = read(fd, buff[fd], BUFFER_SIZE);
+		if (end[fd] == (size_t)-1)
+		{
+			end[fd] = 0;
+			ft_lstclear(lst_begin);
+		}
+		if (end[fd] == 0 || end[fd] == (size_t)-1)
+			break;
+		if (ft_todo(&lst_end, buff[fd], &end[fd], lst_begin))
+			break;
+	}
+	return (ft_lsttoarr(lst_begin));
 }

@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 typedef unsigned long long	t_ull;
 
@@ -122,13 +122,22 @@ int		ft_todo(t_lst ***iter, char *src, size_t *len, t_lst *begin)
 void	*ft_initial(char **buff, t_lst **begin, t_lst ***end, size_t *start)
 {
 	if (*buff == NULL)
+	{
 		*buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 2));
+		*start = 0;
+	}
 	if (*buff == NULL)
 		return (NULL);
 	*begin = NULL;
 	*end = begin;
-	*start = 0;
 	return (*buff);
+}
+
+void ft_arrclear(char **str)
+{
+	if (*str)
+		free(*str);
+	*str = NULL;
 }
 
 char    *get_next_line(int fd)
@@ -150,7 +159,7 @@ char    *get_next_line(int fd)
 			ft_lstclear(lst_begin);
 		if (end[fd] == 0 || end[fd] == (size_t)-1)
 		{
-			free(buff[fd]);
+			ft_arrclear(&buff[fd]);
 			break;
 		}
 		if (ft_todo(&lst_end, buff[fd], &end[fd], lst_begin))

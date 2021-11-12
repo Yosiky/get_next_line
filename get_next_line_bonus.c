@@ -119,7 +119,7 @@ int		ft_todo(t_lst ***iter, char *src, size_t *len, t_lst *begin)
 	return (0);
 }
 
-void	*ft_initial(char **buff, t_lst **begin, t_lst ***end)
+void	*ft_initial(char **buff, t_lst **begin, t_lst ***end, size_t *start)
 {
 	if (*buff == NULL)
 		*buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 2));
@@ -127,6 +127,7 @@ void	*ft_initial(char **buff, t_lst **begin, t_lst ***end)
 		return (NULL);
 	*begin = NULL;
 	*end = begin;
+	*start = 0;
 	return (*buff);
 }
 
@@ -137,7 +138,7 @@ char    *get_next_line(int fd)
 	t_lst           *lst_begin;
 	t_lst			**lst_end;
 
-	if (fd < 0 || fd > 1024 || ft_initial(&buff[fd], &lst_begin, &lst_end) == NULL)
+	if (fd < 0 || fd > 1024 || ft_initial(&buff[fd], &lst_begin, &lst_end, &end[fd]) == NULL)
 		return (NULL);
 	if (end[fd] != 0)
 		if (ft_todo(&lst_end, buff[fd], &end[fd], NULL))
@@ -146,12 +147,12 @@ char    *get_next_line(int fd)
 	{
 		end[fd] = read(fd, buff[fd], BUFFER_SIZE);
 		if (end[fd] == (size_t)-1)
-		{
-			end[fd] = 0;
 			ft_lstclear(lst_begin);
-		}
 		if (end[fd] == 0 || end[fd] == (size_t)-1)
+		{
+			free(buff[fd]);
 			break;
+		}
 		if (ft_todo(&lst_end, buff[fd], &end[fd], lst_begin))
 			break;
 	}

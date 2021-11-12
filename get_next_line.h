@@ -12,13 +12,6 @@
 #  include <stdlib.h>
 # endif
 
-typedef struct s_buff
-{
-	char	buff[BUFFER_SIZE];
-	size_t	begin;
-	size_t	end;
-}	t_buff;
-
 typedef struct s_lst
 {
 	char			data[BUFFER_SIZE];

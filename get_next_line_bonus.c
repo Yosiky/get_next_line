@@ -85,7 +85,8 @@ int ft_check(char *buff, size_t len, size_t *out) {
 	if (len > 0) {
 		while (i < len && buff[i] != '\n')
 			i++;
-		if (buff[i] == '\n') {
+		if (i < len && buff[i] == '\n')
+		{
 			i++;
 			flag = 1;
 		}

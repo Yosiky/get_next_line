@@ -36,7 +36,7 @@ void	*ft_lstclear(t_lst *lst)
 	return (NULL);
 }
 
-size_t	ft_strlen(t_lst *lst)
+size_t	ft_lstlen(t_lst *lst)
 {
 	size_t	len;
 
@@ -59,7 +59,7 @@ char	*ft_lsttoarr(t_lst *lst)
 	if (lst == NULL)
 		return (NULL);
 	start = lst;
-	count = ft_strlen(lst);
+	count = ft_lstlen(lst);
 	if (count == 0)
 		return (NULL);
 	result = (char *)malloc(sizeof(char) * (count * BUFFER_SIZE + 1));
@@ -76,7 +76,8 @@ char	*ft_lsttoarr(t_lst *lst)
 	return (result);
 }
 
-int ft_check(char *buff, size_t len, size_t *out) {
+int ft_check(char *buff, size_t len, size_t *out)
+{
 	size_t  i;
 	char    flag;
 
@@ -85,7 +86,8 @@ int ft_check(char *buff, size_t len, size_t *out) {
 	if (len > 0) {
 		while (i < len && buff[i] != '\n')
 			i++;
-		if (buff[i] == '\n') {
+		if (i < len && buff[i] == '\n')
+		{
 			i++;
 			flag = 1;
 		}

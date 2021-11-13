@@ -14,14 +14,13 @@
 
 typedef struct s_buff
 {
-	char	buff[BUFFER_SIZE];
-	size_t	begin;
-	size_t	end;
+	char	*data;
+	size_t	size;
 }	t_buff;
 
 typedef struct s_lst
 {
-	char			data[BUFFER_SIZE];
+	char			*data;
 	size_t			len;
 	struct s_lst	*next;
 }	t_lst;

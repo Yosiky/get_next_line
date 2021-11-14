@@ -6,11 +6,12 @@
 /*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 15:52:04 by eestelle          #+#    #+#             */
-/*   Updated: 2021/11/14 16:27:19 by eestelle         ###   ########.fr       */
+/*   Updated: 2021/11/14 20:14:35 by eestelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42

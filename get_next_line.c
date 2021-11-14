@@ -175,6 +175,8 @@ char	*get_next_line(int fd)
 		buff.size = read(fd, buff.data, BUFFER_SIZE);
 		if (buff.size == (size_t)-1)
 			ft_clear(&buff, lst_begin);
+		else if (buff.size == 0)
+			ft_clear(&buff, NULL);
 		if (buff.size <= 0 || buff.size == (size_t)-1
 			|| ft_todo(&buff, &lst_end, lst_begin))
 			break;

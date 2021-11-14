@@ -23,20 +23,23 @@
 #  include <stdlib.h>
 # endif
 
+# include <limits.h>
 # include <stddef.h>
 # include <unistd.h>
 
-typedef	struct	s_buff
+typedef struct s_buff
 {
-	char	*buff;
-	size_t	begin;
-	size_t	end; 
+	char	*data;
+	size_t	size;
 }	t_buff;
 
-char    *get_next_line(int fd);
-char	*ft_arrnew(char **arr, size_t size);
-void	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-int 	ft_check(char *buff, size_t start, size_t finish);
-char	*ft_read(int fd, char *res, size_t len, size_t count, t_buff *rm);
+typedef struct s_lst
+{
+	char			*data;
+	size_t			len;
+	struct s_lst	*next;
+}	t_lst;
+
+char	*get_next_line(int fd);
 
 #endif

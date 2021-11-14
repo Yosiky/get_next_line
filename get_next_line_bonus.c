@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_memcpy(char *s1, char *s2, size_t len)
 {
@@ -15,7 +15,7 @@ char	*ft_memcpy(char *s1, char *s2, size_t len)
 
 int	ft_init(int fd, t_buff *buff, t_lst **lbegin, t_lst ***lend)
 {
-	if (fd < 0 || fd > FOPEN_MAX)
+	if (fd < 0 || fd > OPEN_MAX)
 		return (1);
 	if (BUFFER_SIZE <= 0)
 		return (1);
@@ -161,7 +161,7 @@ int	ft_todo(t_buff *buff, t_lst ***end, t_lst *begin)
 
 char	*get_next_line(int fd)
 {
-	static	t_buff	buff[FOPEN_MAX] = {};
+	static	t_buff	buff[OPEN_MAX] = {};
 	t_lst			*lst_begin;
 	t_lst			**lst_end;
 
@@ -175,6 +175,8 @@ char	*get_next_line(int fd)
 		buff[fd].size = read(fd, buff[fd].data, BUFFER_SIZE);
 		if (buff[fd].size == (size_t)-1)
 			ft_clear(&buff[fd], lst_begin);
+		else if (buff[fd].size == 0)
+			ft_clear(&buff[fd], NULL);
 		if (buff[fd].size <= 0 || buff[fd].size == (size_t)-1
 			|| ft_todo(&buff[fd], &lst_end, lst_begin))
 			break;

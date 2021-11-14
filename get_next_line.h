@@ -6,13 +6,11 @@
 /*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 15:52:04 by eestelle          #+#    #+#             */
-/*   Updated: 2021/11/14 15:52:06 by eestelle         ###   ########.fr       */
+/*   Updated: 2021/11/14 16:27:19 by eestelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-
-# include <unistd.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -23,6 +21,9 @@
 # else
 #  include <stdlib.h>
 # endif
+
+# include <unistd.h>
+# include <limits.h>
 
 typedef struct s_buff
 {

@@ -6,7 +6,7 @@
 /*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:03:13 by eestelle          #+#    #+#             */
-/*   Updated: 2021/11/14 15:52:46 by eestelle         ###   ########.fr       */
+/*   Updated: 2021/11/14 16:27:01 by eestelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # endif
 
 # include <limits.h>
-# include <stddef.h>
 # include <unistd.h>
 
 typedef struct s_buff

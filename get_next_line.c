@@ -14,7 +14,7 @@
 
 static	int	ft_init(int fd, t_buff *buff, t_lst **lbegin, t_lst ***lend)
 {
-	if (0 && fd)
+	if (fd < 0 || fd >= OPEN_MAX)
 		return (1);
 	if (BUFFER_SIZE <= 0)
 		return (1);

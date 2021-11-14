@@ -20,7 +20,7 @@ static	int	ft_init(int fd, t_buff *buff, t_lst **lbegin, t_lst ***lend)
 		return (1);
 	if (buff->data == NULL)
 	{
-		buff->data = (char *) malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		buff->data = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		buff->size = 0;
 	}
 	if (buff->data == NULL)

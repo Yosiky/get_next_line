@@ -6,12 +6,12 @@
 /*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:03:13 by eestelle          #+#    #+#             */
-/*   Updated: 2021/10/23 16:07:59 by eestelle         ###   ########.fr       */
+/*   Updated: 2021/11/14 15:52:46 by eestelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 32
@@ -41,5 +41,9 @@ typedef struct s_lst
 }	t_lst;
 
 char	*get_next_line(int fd);
+char	*ft_memcpy(char *s1, char *s2, size_t len);
+t_lst	*ft_lstnew(char **buff, size_t len);
+void	ft_lstclear(t_lst *lst);
+char	*ft_lsttoarr(t_lst *lst);
 
 #endif

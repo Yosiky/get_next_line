@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eestelle <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/14 15:52:04 by eestelle          #+#    #+#             */
+/*   Updated: 2021/11/14 15:52:06 by eestelle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 
 # include <unistd.h>
@@ -26,5 +38,9 @@ typedef struct s_lst
 }	t_lst;
 
 char	*get_next_line(int fd);
+char	*ft_memcpy(char *s1, char *s2, size_t len);
+t_lst	*ft_lstnew(char **buff, size_t len);
+void	ft_lstclear(t_lst *lst);
+char	*ft_lsttoarr(t_lst *lst);
 
 #endif
